@@ -1,6 +1,19 @@
 # Statistics Calculator
 
-A simple JavaScript-powered statistics calculator that takes a list of **comma-separated numbers** and computes:
+A JavaScript-powered statistics calculator that processes a list of comma-separated numbers and computes key descriptive statistics in real time.
+
+## Live Demo
+https://sharpsanders.github.io/statistics-calculator/
+
+<img src="/img/Screenshot-statistics-calculator.png" alt="Screenshot of the Statistics Calculator UI" />
+
+---
+
+## Overview
+
+This project demonstrates data parsing, functional programming patterns, and mathematical computation using vanilla JavaScript.
+
+Users can input a dataset and instantly calculate:
 
 - Mean
 - Median
@@ -9,166 +22,91 @@ A simple JavaScript-powered statistics calculator that takes a list of **comma-s
 - Variance
 - Standard Deviation
 
-Built to practice array methods, functional helpers, and basic statistics formulas in vanilla JS.
+All calculations update dynamically without reloading the page.
 
 ---
 
-## How It Works
+## Features
 
-1. Enter a list of numbers separated by commas, for example:
+- Accepts comma-separated numeric input
+- Cleans and validates user data
+- Handles datasets with duplicate values
+- Gracefully returns no mode when appropriate
+- Real-time DOM updates
+- Clean, responsive dark UI
 
-   ```text
-   1, 2, 2, 3, 4, 7
-Click Calculate.
+---
 
-The page updates and shows:
+## Tech Stack
 
-Mean
+- **HTML5** – semantic structure and form controls  
+- **CSS3** – custom dark theme styling  
+- **JavaScript (ES6+)** – parsing, data processing, DOM updates  
 
-Median
+No external libraries or frameworks used.
 
-Mode (or nothing if there is no mode)
+---
 
-Range
+## Technical Highlights
 
-Variance
+### Input Parsing & Validation
 
-Standard Deviation
+- Splits input using regex to handle optional whitespace
+- Converts values to numbers
+- Filters out invalid entries (`NaN`)
+- Prevents calculations on empty datasets
 
-Each result is shown under its own short explanation of the concept.
+### Functional Programming Patterns
 
-Tech Stack
-HTML – form, labels, and results area.
+Uses:
 
-CSS – dark theme styling + typography.
+- `map()` for number conversion  
+- `filter()` for validation  
+- `reduce()` for aggregation  
+- `toSorted()` for non-mutating sorting  
+- Object-based frequency counting for mode detection  
 
-JavaScript – parsing input, computing statistics, updating the DOM.
+### Statistical Logic
 
-JavaScript Breakdown
-All logic lives in script.js.
+- Median supports even/odd datasets
+- Mode handles multimodal datasets
+- Variance and standard deviation computed using reusable helper functions
+- Separation between calculation logic and DOM rendering
 
-Parsing the Input
-js
-Copy code
-const value = document.querySelector("#numbers").value;
-const array = value.split(/,\s*/g);
-const numbers = array.map(el => Number(el)).filter(el => !isNaN(el));
-Splits on commas (optionally followed by spaces).
+---
 
-Converts each entry to a Number.
+## Project Structure
 
-Filters out anything that isn’t a valid number.
-
-You should enter at least one valid number for meaningful results.
-
-Helper Functions
-Mean
-
-js
-Copy code
-const getMean = (array) =>
-  array.reduce((acc, el) => acc + el, 0) / array.length;
-Median
-
-js
-Copy code
-const getMedian = (array) => {
-  const sorted = array.toSorted((a, b) => a - b);
-  return sorted.length % 2 === 0
-    ? getMean([sorted[sorted.length / 2], sorted[sorted.length / 2 - 1]])
-    : sorted[Math.floor(sorted.length / 2)];
-};
-Mode
-
-js
-Copy code
-const getMode = (array) => {
-  const counts = {};
-  array.forEach(el => counts[el] = counts[el] ? counts[el] + 1 : 1);
-
-  if (new Set(Object.values(counts)).size === 1) {
-    return null; // no mode if all counts equal
-  }
-
-  const highest = Object.keys(counts).sort(
-    (a, b) => counts[b] - counts[a]
-  )[0];
-
-  const mode = Object.keys(counts).filter(
-    (el) => counts[el] === counts[highest]
-  );
-
-  return mode.join(", ");
-};
-Range
-
-js
-Copy code
-const getRange = (array) => Math.max(...array) - Math.min(...array);
-Variance
-
-js
-Copy code
-const getVariance = (array) => {
-  const mean = getMean(array);
-  return array.reduce((acc, el) => {
-    const diff = el - mean;
-    return acc + diff ** 2;
-  }, 0) / array.length;
-};
-Standard Deviation
-
-js
-Copy code
-const getStandardDeviation = (array) =>
-  Math.sqrt(getVariance(array));
-Updating the UI
-js
-Copy code
-const calculate = () => {
-  // parse numbers...
-  const mean = getMean(numbers);
-  const median = getMedian(numbers);
-  const mode = getMode(numbers);
-  const range = getRange(numbers);
-  const variance = getVariance(numbers);
-  const standardDeviation = getStandardDeviation(numbers);
-
-  document.querySelector("#mean").textContent = mean;
-  document.querySelector("#median").textContent = median;
-  document.querySelector("#mode").textContent = mode;
-  document.querySelector("#range").textContent = range;
-  document.querySelector("#variance").textContent = variance;
-  document.querySelector("#standardDeviation").textContent = standardDeviation;
-};
-The <form> calls calculate(); return false; on submit, so the page doesn’t reload.
-
-Project Structure
-text
-Copy code
 statistics-calculator/
-├── index.html   # Form + explanations + result placeholders
-├── styles.css   # Dark theme styling and layout
-└── script.js    # Parsing, stats helpers, and DOM updates
-What I Practiced
-Parsing and validating user input from a text field.
+index.html
+styles.css
+script.js
+img/
+Screenshot-statistics-calculator.png
 
-Using array methods (map, reduce, filter, toSorted).
 
-Implementing basic statistics formulas in JavaScript.
+---
 
-Separating logic into small, reusable helper functions.
+## What I Practiced
 
-Updating the DOM with calculated values.
+- Writing reusable helper functions
+- Implementing mathematical formulas in JavaScript
+- Handling edge cases in user input
+- Updating the DOM efficiently
+- Keeping logic separate from UI concerns
 
-Future Improvements
-Show validation errors if no valid numbers are entered.
+---
 
-Allow users to choose population vs sample variance/standard deviation.
+## Potential Enhancements
 
-Format results to a fixed number of decimal places.
+- Toggle between population and sample variance
+- Decimal precision formatting controls
+- Visual chart representation (histogram)
+- Input error messaging system
 
-Add charts or visualizations (e.g., histogram) for the dataset.
+---
 
-Author
-Created by Trevyn Sanders.
+## Author
+
+Built by Trevyn Sanders  
+Better Endeavors LLC
